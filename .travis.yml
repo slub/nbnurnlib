@@ -1,0 +1,24 @@
+language: java
+
+# test with multiple JDKs
+jdk:
+    - oraclejdk7
+    - openjdk7
+    - oraclejdk8
+
+# use container-based infrastructure
+sudo: false
+
+# create coverage report
+after_success:
+    - mvn clean cobertura:cobertura coveralls:report
+
+# cache dependencies
+cache:
+  directories:
+    - $HOME/.m2
+
+# whitelist
+branches:
+    only:
+        - master
