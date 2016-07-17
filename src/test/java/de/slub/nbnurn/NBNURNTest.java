@@ -17,6 +17,8 @@
 
 package de.slub.nbnurn;
 
+import de.slub.urn.URN;
+import de.slub.urn.URNSyntaxException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,4 +31,27 @@ public class NBNURNTest {
         assertEquals("urn:nbn:de:bsz-47110815", subject.toURN().toString());
     }
 
+    @Test
+    public void Creating_via_proper_NBN_URN_returns_valid_NBNURN() throws Exception {
+        String countryCode = "de";
+        String subnamespacePrefix = "bsz";
+        String nationalBookNumber = "47110815";
+        NBNURN subject = NBNURN.fromURN(URN.fromString(
+                String.format("urn:nbn:%s:%s-%s", countryCode, subnamespacePrefix, nationalBookNumber)));
+        assertEquals(countryCode, subject.getCountryCode());
+        assertEquals(subnamespacePrefix, subject.getSubnamespacePrefix());
+        assertEquals(nationalBookNumber, subject.getNationalBookNumber());
+    }
+
+    @Test
+    public void Creating_via_NBN_URN_with_subnamespace_returns_valid_NBNURN() throws Exception {
+        String countryCode = "se";
+        String subnamespacePrefix = "uu:diva";
+        String nationalBookNumber = "3475";
+        NBNURN subject = NBNURN.fromURN(URN.fromString(
+                String.format("urn:nbn:%s:%s-%s", countryCode, subnamespacePrefix, nationalBookNumber)));
+        assertEquals(countryCode, subject.getCountryCode());
+        assertEquals(subnamespacePrefix, subject.getSubnamespacePrefix());
+        assertEquals(nationalBookNumber, subject.getNationalBookNumber());
+    }
 }

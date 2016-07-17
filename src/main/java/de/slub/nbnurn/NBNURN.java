@@ -28,7 +28,8 @@ final public class NBNURN {
     private final String subnamespacePrefix;
     private final URN urn;
 
-    private NBNURN(String countryCode, String subnamespacePrefix, String nationalBookNumber) throws URNSyntaxException {
+    private NBNURN(String countryCode, String subnamespacePrefix, String nationalBookNumber)
+            throws URNSyntaxException {
         this.countryCode = countryCode;
         this.subnamespacePrefix = subnamespacePrefix;
         this.nationalBookNumber = nationalBookNumber;
@@ -44,8 +45,27 @@ final public class NBNURN {
         return new NBNURN(countryCode, subnamespacePrefix, nationalBookNumber);
     }
 
+    public static NBNURN fromURN(URN urn) throws URNSyntaxException {
+        String[] parts = urn.getNamespaceSpecificString().split("-");
+        String cc = parts[0].substring(0, parts[0].indexOf(':'));
+        String sp = parts[0].substring(parts[0].indexOf(':') + 1);
+        String nbn = parts[1];
+        return new NBNURN(cc, sp, nbn);
+    }
+
     public URN toURN() {
         return urn;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public String getSubnamespacePrefix() {
+        return subnamespacePrefix;
+    }
+
+    public String getNationalBookNumber() {
+        return nationalBookNumber;
+    }
 }
