@@ -28,7 +28,7 @@ final public class NBNURN {
     private final String subnamespacePrefix;
     private final URN urn;
 
-    public NBNURN(String countryCode, String subnamespacePrefix, String nationalBookNumber) throws URNSyntaxException {
+    private NBNURN(String countryCode, String subnamespacePrefix, String nationalBookNumber) throws URNSyntaxException {
         this.countryCode = countryCode;
         this.subnamespacePrefix = subnamespacePrefix;
         this.nationalBookNumber = nationalBookNumber;
@@ -37,6 +37,11 @@ final public class NBNURN {
                         this.countryCode,
                         this.subnamespacePrefix,
                         this.nationalBookNumber));
+    }
+
+    public static NBNURN newInstance(String countryCode, String subnamespacePrefix, String nationalBookNumber)
+            throws URNSyntaxException {
+        return new NBNURN(countryCode, subnamespacePrefix, nationalBookNumber);
     }
 
     public URN toURN() {

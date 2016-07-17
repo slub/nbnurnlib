@@ -25,7 +25,7 @@ public class NBNURNTest {
 
     @Test
     public void Returns_URN() throws Exception {
-        NBNURN subject = new NBNURN("de", "bsz", "47110815");
+        NBNURN subject = NBNURN.newInstance("de", "bsz", "47110815");
         assertEquals("urn:nbn:de:bsz-47110815", subject.toURN().toString());
     }
 
