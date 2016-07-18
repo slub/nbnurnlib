@@ -20,9 +20,15 @@ package de.slub.nbnurn;
 import de.slub.urn.URN;
 import de.slub.urn.URNSyntaxException;
 
+import java.util.regex.Pattern;
+
+import static java.lang.String.format;
+
 final public class NBNURN {
 
-    public static final String NBN_NAMESPACE_IDENTIFIER = "nbn";
+    private static final Pattern allowedNamespaceSpecificString = Pattern.compile("^([\\w]+)(:[\\w]+)*-[\\w]+$");
+    private static final String NBN_NAMESPACE_IDENTIFIER = "nbn";
+
     private final String countryCode;
     private final String nationalBookNumber;
     private final String subnamespacePrefix;
@@ -33,11 +39,19 @@ final public class NBNURN {
         this.countryCode = countryCode;
         this.subnamespacePrefix = subnamespacePrefix;
         this.nationalBookNumber = nationalBookNumber;
-        this.urn = URN.newInstance(NBN_NAMESPACE_IDENTIFIER,
-                String.format("%s:%s-%s",
-                        this.countryCode,
-                        this.subnamespacePrefix,
-                        this.nationalBookNumber));
+
+        String namespaceSpecificString;
+        if (subnamespacePrefix == null || subnamespacePrefix.isEmpty()) {
+            namespaceSpecificString = format("%s-%s",
+                    this.countryCode,
+                    this.nationalBookNumber);
+        } else {
+            namespaceSpecificString = format("%s:%s-%s",
+                    this.countryCode,
+                    this.subnamespacePrefix,
+                    this.nationalBookNumber);
+        }
+        this.urn = URN.newInstance(NBN_NAMESPACE_IDENTIFIER, namespaceSpecificString);
     }
 
     public static NBNURN newInstance(String countryCode, String subnamespacePrefix, String nationalBookNumber)
@@ -46,11 +60,30 @@ final public class NBNURN {
     }
 
     public static NBNURN fromURN(URN urn) throws URNSyntaxException {
+        assertValidNamespaceIdentifier(urn.getNamespaceIdentifier());
+        assertValidNamespaceSpecificString(urn.getNamespaceSpecificString());
+
         String[] parts = urn.getNamespaceSpecificString().split("-");
-        String cc = parts[0].substring(0, parts[0].indexOf(':'));
-        String sp = parts[0].substring(parts[0].indexOf(':') + 1);
+
+        int colonIndex = parts[0].indexOf(':');
+        String cc = (colonIndex > 0) ? parts[0].substring(0, colonIndex) : parts[0];
+        String sp = (colonIndex > 0) ? parts[0].substring(colonIndex + 1) : null;
         String nbn = parts[1];
         return new NBNURN(cc, sp, nbn);
+    }
+
+    private static void assertValidNamespaceSpecificString(String namespaceSpecificString) throws URNSyntaxException {
+        if (!allowedNamespaceSpecificString.matcher(namespaceSpecificString).matches()) {
+            throw new URNSyntaxException(format(
+                    "Not a valid NBN namespace specific string: '%s'", namespaceSpecificString));
+        }
+    }
+
+    private static void assertValidNamespaceIdentifier(String namespaceIdentifier) throws URNSyntaxException {
+        if (!NBN_NAMESPACE_IDENTIFIER.equalsIgnoreCase(namespaceIdentifier)) {
+            throw new URNSyntaxException(format(
+                    "Only '%s' is allowed as namespace identifier for NBN-URNs", NBN_NAMESPACE_IDENTIFIER));
+        }
     }
 
     public URN toURN() {

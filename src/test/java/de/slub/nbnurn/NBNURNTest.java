@@ -20,6 +20,7 @@ package de.slub.nbnurn;
 import de.slub.urn.URN;
 import de.slub.urn.URNSyntaxException;
 import org.junit.Test;
+import org.junit.runner.notification.RunListener;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,6 +30,18 @@ public class NBNURNTest {
     public void Returns_URN() throws Exception {
         NBNURN subject = NBNURN.newInstance("de", "bsz", "47110815");
         assertEquals("urn:nbn:de:bsz-47110815", subject.toURN().toString());
+    }
+
+    @Test
+    public void Subnamespace_is_omitted_in_URN_representation_when_null() throws Exception {
+        NBNURN subject = NBNURN.newInstance("hu", null, "3006");
+        assertEquals("urn:nbn:hu-3006", subject.toURN().toString());
+    }
+
+    @Test
+    public void Subnamespace_is_omitted_in_URN_representation_when_empty() throws Exception {
+        NBNURN subject = NBNURN.newInstance("hu", "", "3006");
+        assertEquals("urn:nbn:hu-3006", subject.toURN().toString());
     }
 
     @Test
@@ -44,6 +57,13 @@ public class NBNURNTest {
     }
 
     @Test
+    public void Uppercase_NBN_is_a_valid_namespace_identifier() throws Exception {
+        NBNURN subject = NBNURN.fromURN(URN.fromString("URN:NBN:fi-fe201003181510"));
+        URN urn = subject.toURN();
+        assertEquals("nbn", urn.getNamespaceIdentifier());
+    }
+
+    @Test
     public void Creating_via_NBN_URN_with_subnamespace_returns_valid_NBNURN() throws Exception {
         String countryCode = "se";
         String subnamespacePrefix = "uu:diva";
@@ -53,5 +73,10 @@ public class NBNURNTest {
         assertEquals(countryCode, subject.getCountryCode());
         assertEquals(subnamespacePrefix, subject.getSubnamespacePrefix());
         assertEquals(nationalBookNumber, subject.getNationalBookNumber());
+    }
+
+    @Test(expected = URNSyntaxException.class)
+    public void Creating_with_non_NBN_URN_throws_exception() throws Exception {
+        NBNURN.fromURN(URN.fromString("urn:non-nbn:foo"));
     }
 }
