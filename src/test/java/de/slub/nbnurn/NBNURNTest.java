@@ -84,4 +84,17 @@ public class NBNURNTest {
     public void Creating_with_invalid_NamespaceSpecificString_throws_exception() throws Exception {
         NBNURN.fromURN(URN.fromString("urn:nbn:invalidnss"));
     }
+
+    @Test
+    public void Calling_toString_returns_NBN_URN_literal() throws Exception {
+        String countryCode = "de";
+        String subnamespacePrefix = "bsz";
+        String nationalBookNumber = "47110815";
+
+        NBNURN subject = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+        String literal = subject.toString();
+        assertEquals(
+                String.format("urn:nbn:%s:%s-%s", countryCode, subnamespacePrefix, nationalBookNumber),
+                literal);
+    }
 }

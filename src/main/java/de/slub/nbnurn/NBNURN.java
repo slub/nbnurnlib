@@ -101,4 +101,9 @@ final public class NBNURN {
     public String getNationalBookNumber() {
         return nationalBookNumber;
     }
+
+    @Override
+    public String toString() {
+        return urn.toString();
+    }
 }
