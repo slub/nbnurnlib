@@ -76,7 +76,12 @@ public class NBNURNTest {
     }
 
     @Test(expected = URNSyntaxException.class)
-    public void Creating_with_non_NBN_URN_throws_exception() throws Exception {
+    public void Creating_without_NBN_as_NamespaceIdentifier_throws_exception() throws Exception {
         NBNURN.fromURN(URN.fromString("urn:non-nbn:foo"));
+    }
+
+    @Test(expected = URNSyntaxException.class)
+    public void Creating_with_invalid_NamespaceSpecificString_throws_exception() throws Exception {
+        NBNURN.fromURN(URN.fromString("urn:nbn:invalidnss"));
     }
 }
