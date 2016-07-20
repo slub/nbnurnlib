@@ -54,6 +54,13 @@ final public class NBNURN {
         this.urn = URN.newInstance(NBN_NAMESPACE_IDENTIFIER, namespaceSpecificString);
     }
 
+    private NBNURN(NBNURN that) {
+        this.countryCode = that.countryCode;
+        this.subnamespacePrefix = that.subnamespacePrefix;
+        this.nationalBookNumber = that.nationalBookNumber;
+        this.urn = that.urn;
+    }
+
     public static NBNURN newInstance(String countryCode, String subnamespacePrefix, String nationalBookNumber)
             throws URNSyntaxException {
         return new NBNURN(countryCode, subnamespacePrefix, nationalBookNumber);
@@ -115,5 +122,10 @@ final public class NBNURN {
     @Override
     public int hashCode() {
         return urn.hashCode();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return new NBNURN(this);
     }
 }

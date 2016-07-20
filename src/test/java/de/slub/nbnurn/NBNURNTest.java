@@ -21,6 +21,7 @@ import de.slub.urn.URN;
 import de.slub.urn.URNSyntaxException;
 import org.junit.Test;
 import org.junit.runner.notification.RunListener;
+import org.omg.CORBA.OBJ_ADAPTER;
 
 import static org.junit.Assert.assertEquals;
 
@@ -118,5 +119,16 @@ public class NBNURNTest {
         NBNURN subject2 = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
 
         assertEquals(subject1.hashCode(), subject2.hashCode());
+    }
+
+    @Test
+    public void Cloning_results_in_equal_object() throws Exception {
+        String countryCode = "de";
+        String subnamespacePrefix = "bsz";
+        String nationalBookNumber = "47110815";
+        NBNURN subject = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+        Object clone = subject.clone();
+
+        assertEquals(subject, clone);
     }
 }
