@@ -106,4 +106,14 @@ final public class NBNURN {
     public String toString() {
         return urn.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof NBNURN) && urn.equals(((NBNURN) obj).urn);
+    }
+
+    @Override
+    public int hashCode() {
+        return urn.hashCode();
+    }
 }

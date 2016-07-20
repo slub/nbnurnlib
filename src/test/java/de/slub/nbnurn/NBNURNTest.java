@@ -97,4 +97,26 @@ public class NBNURNTest {
                 String.format("urn:nbn:%s:%s-%s", countryCode, subnamespacePrefix, nationalBookNumber),
                 literal);
     }
+
+    @Test
+    public void Equally_initialized_objects_are_equal() throws Exception {
+        String countryCode = "de";
+        String subnamespacePrefix = "bsz";
+        String nationalBookNumber = "47110815";
+        NBNURN subject1 = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+        NBNURN subject2 = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+
+        assertEquals(subject1, subject2);
+    }
+
+    @Test
+    public void Equally_initialized_objects_have_equal_hash_codes() throws Exception {
+        String countryCode = "de";
+        String subnamespacePrefix = "bsz";
+        String nationalBookNumber = "47110815";
+        NBNURN subject1 = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+        NBNURN subject2 = NBNURN.newInstance(countryCode, subnamespacePrefix, nationalBookNumber);
+
+        assertEquals(subject1.hashCode(), subject2.hashCode());
+    }
 }
