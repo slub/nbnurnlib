@@ -79,6 +79,10 @@ final public class NBNURN {
         return new NBNURN(cc, sp, nbn);
     }
 
+    public static NBNURN fromString(String literal) throws URNSyntaxException {
+        return fromURN(URN.fromString(literal));
+    }
+
     private static void assertValidNamespaceSpecificString(String namespaceSpecificString) throws URNSyntaxException {
         if (!allowedNamespaceSpecificString.matcher(namespaceSpecificString).matches()) {
             throw new URNSyntaxException(format(

@@ -20,8 +20,6 @@ package de.slub.nbnurn;
 import de.slub.urn.URN;
 import de.slub.urn.URNSyntaxException;
 import org.junit.Test;
-import org.junit.runner.notification.RunListener;
-import org.omg.CORBA.OBJ_ADAPTER;
 
 import static org.junit.Assert.assertEquals;
 
@@ -84,6 +82,14 @@ public class NBNURNTest {
     @Test(expected = URNSyntaxException.class)
     public void Creating_with_invalid_NamespaceSpecificString_throws_exception() throws Exception {
         NBNURN.fromURN(URN.fromString("urn:nbn:invalidnss"));
+    }
+
+    @Test
+    public void Creating_from_String_is_equal_to_creating_from_URN() throws Exception {
+        String nbnurnString = "URN:NBN:fi-fe201003181510";
+        URN urn = URN.fromString(nbnurnString);
+        NBNURN subject = NBNURN.fromString(nbnurnString);
+        assertEquals(urn, subject.toURN());
     }
 
     @Test
